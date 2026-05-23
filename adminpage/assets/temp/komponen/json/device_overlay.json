@@ -1,0 +1,8 @@
+{ 
+    "device": {
+        "device_overlay": [
+            { "device": "vivo 1718" },
+            { "device": "vivo 2007" }
+        ]
+    }
+}
