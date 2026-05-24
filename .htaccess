@@ -9,23 +9,11 @@
   ErrorDocument 404 https://balipujas.com/demo/toko/module/err/err_404
   ErrorDocument 500 https://balipujas.com/demo/toko/module/err/err_500
 
-  # Web
-  RewriteRule ^s/(.*+)/?$ search.php?p_url=$1
-  RewriteRule ^p/([^/\.]+)/?$ product_detail.php?p_url=$1
-  RewriteRule ^v/([^/\.]+)/?$ product_checkout.php?p_url=$1
-  RewriteRule ^c/([^/\.]+)/?$ categories_detail.php?p_url=$1
-  RewriteRule ^c0/([^/\.]+)/?$ categories_detail_c0.php?p_url=$1
-  RewriteRule ^c1/([^/\.]+)/([^/\.]+)/?$ categories_detail_c1.php?p_url=$1&s_url=$2
-  RewriteRule ^c2/([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ categories_detail_c2.php?p_url=$1&s_url=$2&t_url=$3
-  RewriteRule ^payment/([^/\.]+)/?$ payment_callback.php?p_url=$1
-  RewriteRule ^topup/([^/\.]+)/?$ balance_topup.php?p_url=$1
-  RewriteRule ^trx/([^/\.]+)/?$ transaction_detail.php?p_url=$1
-  RewriteRule ^n/([^/\.]+)/?$ notification_detail.php?p_url=$1
-  RewriteRule ^resetpass/([^/\.]+)/?$ reset-password.php?p_url=$1
-
+  # Send all requests to public/index.php if they don't point to an existing file or directory
+  RewriteRule ^$ public/index.php [L]
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_FILENAME}.php -f
-  RewriteRule ^(.*)$ $1.php
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^(.*)$ public/index.php?url=$1 [QSA,L]
 
 </IfModule>
 
