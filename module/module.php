@@ -5,7 +5,50 @@
   session_start();
   
   $main_url = "https://toko.vendora.co.id/";
-  $main_imgurl = $main_url."assets/uploaded/";
+  
+  // Image Load Balancer Class to distribute image requests across multiple CDN/mirror hosts
+  if (!class_exists('ImageLoadBalancer')) {
+      class ImageLoadBalancer {
+          private $hosts;
+          private $index = 0;
+
+          public function __construct($main_url) {
+              $default_host = $main_url . "assets/uploaded/";
+              $this->hosts = [$default_host];
+              
+              // Detect domain and generate CDN subdomains if not on localhost
+              $parsed = parse_url($main_url);
+              if (isset($parsed['host']) && $parsed['host'] !== 'localhost' && $parsed['host'] !== '127.0.0.1' && !filter_var($parsed['host'], FILTER_VALIDATE_IP)) {
+                  $host_parts = explode('.', $parsed['host']);
+                  if (count($host_parts) >= 2) {
+                      $domain = implode('.', array_slice($host_parts, -2));
+                      $scheme = isset($parsed['scheme']) ? $parsed['scheme'] : 'https';
+                      $port = isset($parsed['port']) ? ':' . $parsed['port'] : '';
+                      
+                      // Load balance across 3 CDN subdomains and the main host
+                      $this->hosts = [
+                          $scheme . "://cdn1." . $domain . $port . "/assets/uploaded/",
+                          $scheme . "://cdn2." . $domain . $port . "/assets/uploaded/",
+                          $scheme . "://cdn3." . $domain . $port . "/assets/uploaded/",
+                          $default_host
+                      ];
+                  }
+              }
+              
+              // Randomize starting index to balance initial load
+              $this->index = rand(0, count($this->hosts) - 1);
+          }
+
+          public function __toString() {
+              $host = $this->hosts[$this->index];
+              $this->index = ($this->index + 1) % count($this->hosts);
+              return $host;
+          }
+      }
+  }
+
+  $main_imgurl = new ImageLoadBalancer($main_url);
+
   
   if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
     echo "Source code ini hanya support sampai PHP v7.4. <br>";

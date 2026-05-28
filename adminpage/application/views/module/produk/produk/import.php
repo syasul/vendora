@@ -176,6 +176,16 @@
     </div>
 </div>
 
+<script>
+    const importUrls = {
+        upload: '<?= base_url("produk_import/upload") ?>',
+        get_preview: '<?= base_url("produk_import/get_preview") ?>',
+        process: '<?= base_url("produk_import/process") ?>',
+        reset: '<?= base_url("produk_import/reset") ?>',
+        download_failed_rows: '<?= base_url("produk_import/download_failed_rows") ?>',
+        download_template: '<?= base_url("produk_import/download_template") ?>'
+    };
+</script>
 <script src="<?= base_url('assets/js/import-handler.js'); ?>"></script>
 
 <style>

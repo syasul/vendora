@@ -5,7 +5,23 @@
   if($rest_sistem['result']['midtrans_tipekey']=='production') {
   Veritrans_Config::$isProduction = true;
   }
-  Veritrans_Config::$serverKey = $rest_sistem['result']['midtrans_serverkey'];
+  $server_key = $rest_sistem['result']['midtrans_serverkey'];
+  Veritrans_Config::$serverKey = $server_key;
+
+  // Secure Signature Key Verification
+  $json_input = file_get_contents("php://input");
+  $raw_notification = json_decode($json_input, true);
+
+  if (!isset($raw_notification['signature_key'])) {
+      http_response_code(400);
+      die("Missing Signature Key");
+  }
+
+  $local_signature = hash("sha512", $raw_notification['order_id'] . $raw_notification['status_code'] . $raw_notification['gross_amount'] . $server_key);
+  if ($local_signature !== $raw_notification['signature_key']) {
+      http_response_code(403);
+      die("Invalid Midtrans Signature");
+  }
 
   $notif = new Veritrans_Notification();
 

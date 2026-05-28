@@ -462,6 +462,8 @@
 
     <div id="lmore_failalrt"></div>
 
+    <?php include "app/Views/components/cta_component.php"; ?>
+
     <?php include "module/include/footer.php"; ?>
     
     <?php include "module/include/javascript.php"; ?>

@@ -23,6 +23,7 @@
                     <option value="midtrans" <?php if ($sistem['metode_pembayaran']=='midtrans') echo 'selected'; ?>>Midtrans</option>
                     <option value="tripay" <?php if ($sistem['metode_pembayaran']=='tripay') echo 'selected'; ?>>Tripay</option>
                     <option value="xendit" <?php if ($sistem['metode_pembayaran']=='xendit') echo 'selected'; ?>>Xendit</option>
+                    <option value="opsim" <?php if ($sistem['metode_pembayaran']=='opsim') echo 'selected'; ?>>Opsim Payment Simulator</option>
                     <option value="manual" <?php if ($sistem['metode_pembayaran']=='manual') echo 'selected'; ?>>Transfer Manual</option>
                   </select>
                 </div>
